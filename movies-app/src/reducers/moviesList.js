@@ -3,6 +3,8 @@ import Constants from './../utils/constants';
 const _defaultState = {
     success: null,
     fetching: false,
+    name: '',
+    description: '',
     moviesList: []
 };
 
@@ -13,7 +15,10 @@ const moviesListing = (state = _defaultState, action) => {
             case Constants.MOVIE_LIST.GET_DATA: {
                return {
                    ...state,
-                   moviesList: payload
+                   fetching: false,
+                   name: payload.name,
+                   description: payload.description,
+                   moviesList: payload.results
                  }   
             }
             case Constants.MOVIE_LIST.FETCHING_LIST: {

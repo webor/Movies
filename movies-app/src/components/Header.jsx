@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import apiConfig from '../config/apiConfig';
+import Helper from '.././utils/helper';
+import { fetchMovies } from '../actions/moviesList';
+import { connect } from 'react-redux';
+import './../css/header.css';
 class Header extends Component {
     
     constructor( props ) {
         super(props);
         this.state = {
-            response: {}
+            selectedMenu: 'top'
         };
         this.data = {
-            title: 'Movies Hunt',
+            title: 'MovieHunt',
             navbar: [
                 {
                     id: 'top',
@@ -31,46 +34,91 @@ class Header extends Component {
             ],
             navbarActions: [
                 {
-                    id: 'login',
-                    displayLabel: 'Login',
-                    value: 'login',
-                    order: 1
-                },
-                {
                     id: 'signUp',
                     displayLabel: 'Sign Up',
                     value: 'signUp',
+                    order: 1
+                },
+                {
+                    id: 'login',
+                    displayLabel: 'Login',
+                    value: 'login',
                     order: 2
-                }
+                },
             ]
         }
-        this.fetchMovies = this.fetchMovies.bind( this );
-        this.fetchMovies();
-        
+        this.fetchMoviesApi = this.fetchMoviesApi.bind( this );
+        this.handleSelectMenu = this.handleSelectMenu.bind( this );
+        this.fetchMoviesApi();
     }
     
-    fetchMovies() {
-        const request = new Request( apiConfig.movieList.url );
-        var headers = new Headers( apiConfig.movieList.header );
-        fetch(request, headers ).then((response) => {
-            return response.json();
-          })
-          .then((response ) => {
-              console.log( JSON.stringify( response ) );
+    handleSelectMenu( event ) {
+        const _event = event.target.getAttribute( 'data-id' );
+        if( this.state.selectedMenu !== _event ){
             this.setState( {
-                response: response
-            });
-          });
-          
+                selectedMenu: _event
+            } );    
+        }
+    }
+    
+    fetchMoviesApi() {
+        this.props.fetchMovies();
     }
     
     render() {
         return (
             <header className="App-header">
+                <div className="header__section width-15">
+                    <i className="fas fa-bars"></i>
+                </div>
+                <div className="header__section width-15">
+                    <i className="fas fa-heartbeat"></i>
+                    <span className="header__section__title"> { this.data.title } </span>
+                </div>
+                <ul className="navbar width-40" onClick = { this.handleSelectMenu } >
+                    {
+                        this.data.navbar.map( ( item, index ) => {
+                            const _width = parseInt(100/this.data.navbar.length),
+                            _activeClassName = Helper.classNames( `navbar__item width-${ _width }`, {
+                                'navbar__item--active': item.value === this.state.selectedMenu
+                            } );
+                            return (
+                                <li data-id={ item.value }
+                                className={_activeClassName} 
+                                key={`element__${index}__${item.value}`}> { item.displayLabel } </li>
+                            );  
+                    })
+                }
+                </ul>
+                <span className='navbar__devide'></span>
+                <ul className="navbar__actions width-25">
+                    {
+                        this.data.navbarActions.map( ( item, index ) => {
+                            const _activeClassName = Helper.classNames( `navbar__item width-30`, {
+                                'navbar__item--signUp': item.value === 'signUp',
+                                'navbar__item--login': item.value === 'login'
+                            } );
+                            return (
+                                <li data-id={ item.value }
+                                className={_activeClassName} 
+                                key={`element__${index}__${item.value}`}> { item.displayLabel } </li>
+                            );  
+                        } )
+                    }
                 
+                </ul>
             </header>
         );
     }
 }
 
-export default Header;
+const mapStateToProps = state => ({
+    ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+    fetchMovies: (payload) => {
+        dispatch(fetchMovies( payload ));
+    } 
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
