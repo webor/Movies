@@ -6,6 +6,7 @@ const _defaultState = {
     createdBy: '',
     name: '',
     description: '',
+    closeModal: false,
     moviesList: []
 };
 

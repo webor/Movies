@@ -41,7 +41,7 @@ class MovieListing extends Component {
         } else if( _eventId === 'delete' && !isEmpty( sessionId ) ) {
             this.props.removeMovies( { media_id: this.state.activatedElement } );
         } else {
-            Helper.showNotification( `You Have not Signed In First click Sign In then login to continue`, 'warning', 5000 );
+            Helper.showNotification( `You Have not Signed In First click Sign In then Click login to continue`, 'warning', 5000 );
         }
     }
     
@@ -52,11 +52,13 @@ class MovieListing extends Component {
     }
     
     fetchRatingCallback( payload ) {
+        this.onCloseModal();
         this.props.updateRating({ 
             movieId: this.state.activatedElement,
             value: payload
         });
     }
+    
     
     render() {
         return(

@@ -21,7 +21,8 @@ const konstants = (() => {
         },
         MOVIE_ACTIONS: {
             RATE_MOVIE: 'MOVIE_ACTIONS:RATE_MOVIE',
-            DELETE_MOVIE: 'MOVIE_ACTIONS:DELETE_MOVIE'
+            DELETE_MOVIE: 'MOVIE_ACTIONS:DELETE_MOVIE',
+            CLOSE_MODAL: 'MOVIE_ACTIONS:CLOSE_MODAL'
         } 
         
     };

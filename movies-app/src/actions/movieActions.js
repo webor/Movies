@@ -49,12 +49,10 @@ export const updateRating = ( payload = {} ) => {
                 'Access-Control-Allow-Origin': '*',
             }
          };
-           axios(request).then((response) => {
-               
+           axios(request).then((response) => {   
             console.log( 'ALLOWED RATING', JSON.stringify( response.data ) );
-            if( response.data.status_message === 'Success' ) {
-                Helper.showNotification( `Success ratings have been updated successfully`, 'success', 5000 );
-            }
+            Helper.showNotification( `Success ratings have been updated successfully`, 'success', 5000 );
+            
         }).catch((err) => {
             Helper.showNotification( `Error: ${ err.message }`, 'error', 5000 );
         });
