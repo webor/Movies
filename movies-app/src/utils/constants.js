@@ -1,5 +1,10 @@
 const konstants = (() => {
     return {
+        ACCOUNTS: {
+            SAVE_SESSION_ID: 'ACCOUNT:SAVE_SESSION_ID',
+          REQUEST_TOKEN: 'ACCOUNT:REQUEST_TOKEN',
+          SAVE_REQUEST_TOKEN: 'ACCOUNT:SAVE_REQUEST_TOKEN'
+        },
         ROUTER: {
             CHANGE_ROUTE: 'ROUTER:CHANGE_ROUTE',
             RESET_STATE_DATA: 'ROUTER:RESET_STATE_DATA',
@@ -13,7 +18,13 @@ const konstants = (() => {
         MOVIE_LIST: {
             FETCHING_LIST: 'MOVIE_LIST:FETCHING_LIST',
             GET_DATA: 'MOVIE_LIST:GET_DATA'
-        }
+        },
+        MOVIE_ACTIONS: {
+            RATE_MOVIE: 'MOVIE_ACTIONS:RATE_MOVIE',
+            DELETE_MOVIE: 'MOVIE_ACTIONS:DELETE_MOVIE',
+            CLOSE_MODAL: 'MOVIE_ACTIONS:CLOSE_MODAL'
+        } 
+        
     };
 })();
 

@@ -1,0 +1,32 @@
+.rate__movie{
+    width: 100%;
+    background-color: #282c34;
+}
+
+.ratePopup__description{
+    vertical-align: middle;
+    display: inline-block;
+    text-align: center;
+    float: right;
+}
+
+.ratePopup__header{
+    font-size: 28px;
+    font-weight: bold;
+    text-align: left;
+    color: #eeeeee;
+    margin: 10px 0;
+}
+
+.ratePopup__text{
+    font-size: 20px;
+    text-align: center;
+    color: #eeeeee;
+}
+
+.ratePopup__title{
+    font-size: 22px;
+    text-align: center;
+    color: #eeeeee;
+    margin: 10px 0;
+}

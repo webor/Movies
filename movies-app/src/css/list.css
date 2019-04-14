@@ -1,0 +1,115 @@
+.listing__wrapper{
+    padding: 0 60px;
+    max-width: 1280px;
+}
+
+.listing__container{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.listing__item{
+    position: relative;
+    display: inline-block;
+    width: 33.33%;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    margin-bottom: 50px;
+    transform: scale(1);
+    transition: transform 0.5s ease-in;
+    
+}
+
+.listing__item__icon.fas{
+    color: white;
+    font-size: 70px;
+    margin-bottom: 20px;
+}
+
+.listing__item__action {
+    width: 38%;
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 57px 10px;
+}
+
+.listing__item__actions {
+    top: 3px;
+    background: black;
+    opacity: 0.8;
+    position: absolute;
+    width: 91%;
+    right: 18px;
+    height: 51%;
+}
+
+.listing__item:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 0.5s ease-out;
+}
+
+.listing__item__info__title {
+    color: #eeee;
+    font-size: 18px;
+    display: block;
+    text-align: left;
+}
+
+.listing__item__info{
+    text-align: left;   
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5);
+}
+
+.listing__item__info__date{
+    color: #aaa;
+    font-size: 14px;
+    display: block;
+    text-align: left;
+}
+
+.listing__item__el{
+    vertical-align: middle;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.listing__item__info__rating{
+    color: rgb(74, 207, 74);
+    font-size: 14px;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.listing__item__info{
+  background-color: #282c34;
+  padding: 10px;
+    box-sizing: border-box;
+    min-height: 200px;
+}
+
+.listing__item__info__details{
+    color: #ccc;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+}
+
+.listing__header{
+    font-size: 28px;
+    margin: 50px 0 10px 0;
+    font-weight: bold;
+    text-align: left;
+    color: #eeeeee;
+}
+
+.listing__description{
+    font-size: 20px;
+    text-align: left;
+    color: #eeeeee;
+}
