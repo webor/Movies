@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import Preloader from './Preloader';
+import Helper from '.././utils/helper';
 import Modal from "react-responsive-modal";
 import '.././css/list.css';
+import { isEmpty } from 'lodash';
 import MovieElement from './../components/MovieElement';
 import RateMovie from './../components/RateMovie';
 import { removeMovies, updateRating } from '../actions/movieActions';
@@ -30,14 +32,16 @@ class MovieListing extends Component {
     }
     
     handleMovieActions( event ) {
-        const _eventId = event.currentTarget.getAttribute('data-action');
-        if( _eventId !== this.state.activatedAction ) {
+        const _eventId = event.currentTarget.getAttribute('data-action'),
+        { sessionId = '' } = this.props.account;
+        if( _eventId !== this.state.activatedAction && !isEmpty( sessionId ) ) {
             this.setState( {
                 activatedAction: _eventId
             } );
-        }
-        if( _eventId === 'delete' ) {
+        } else if( _eventId === 'delete' && !isEmpty( sessionId ) ) {
             this.props.removeMovies( { media_id: this.state.activatedElement } );
+        } else {
+            Helper.showNotification( `You Have not Signed In First click Sign In then login to continue`, 'warning', 5000 );
         }
     }
     
@@ -98,7 +102,8 @@ class MovieListing extends Component {
 }
 
 const mapStateToProps = state => ({
-    moviesData: state.moviesList
+    moviesData: state.moviesList,
+    account: state.account
 });
 
 const mapDispatchToProps = dispatch => ({
