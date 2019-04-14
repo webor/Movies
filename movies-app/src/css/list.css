@@ -10,6 +10,7 @@
 }
 
 .listing__item{
+    position: relative;
     display: inline-block;
     width: 33.33%;
     box-sizing: border-box;
@@ -19,7 +20,34 @@
     transition: transform 0.5s ease-in;
     
 }
+
+.listing__item__icon.fas{
+    color: white;
+    font-size: 70px;
+    margin-bottom: 20px;
+}
+
+.listing__item__action {
+    width: 38%;
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 57px 10px;
+}
+
+.listing__item__actions {
+    top: 3px;
+    background: black;
+    opacity: 0.8;
+    position: absolute;
+    width: 91%;
+    right: 18px;
+    height: 51%;
+}
+
 .listing__item:hover{
+    cursor: pointer;
     transform: scale(1.05);
     transition: transform 0.5s ease-out;
 }

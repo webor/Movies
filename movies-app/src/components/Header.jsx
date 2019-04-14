@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Helper from '.././utils/helper';
+import { isEmpty } from 'lodash';
+import { fetchUserRequestToken, fetchUserSessionId } from '../actions/accountActions';
 import { fetchMovies } from '../actions/moviesList';
 import { connect } from 'react-redux';
 import './../css/header.css';
@@ -8,7 +10,8 @@ class Header extends Component {
     constructor( props ) {
         super(props);
         this.state = {
-            selectedMenu: 'top'
+            selectedMenu: 'top',
+            isLoginSuccess: false,
         };
         this.data = {
             title: 'MovieHunt',
@@ -45,11 +48,37 @@ class Header extends Component {
                     value: 'login',
                     order: 2
                 },
+                {
+                    id: 'loggedIn',
+                    displayLabel: '',
+                    value: 'loggedIn',
+                    order: 3
+                }
             ]
         }
         this.fetchMoviesApi = this.fetchMoviesApi.bind( this );
         this.handleSelectMenu = this.handleSelectMenu.bind( this );
+        this.handleAccountActions = this.handleAccountActions.bind( this );
+        this.validateAccountSignUp();
         this.fetchMoviesApi();
+    }
+    
+    validateAccountSignUp() {
+        const _urlParams = Helper.extractKeysFromUrl( window.location.search );
+        if( _urlParams.request_token && JSON.parse(_urlParams.approved) ) {
+            this.props.fetchUserRequestToken( { requestToken: _urlParams.request_token } );
+        } else {
+            this.props.fetchUserRequestToken();
+        }
+    }
+    
+    componentDidUpdate() {
+        if( !isEmpty( this.props.account.sessionId ) && !this.state.isLoginSuccess ) {
+            Helper.showNotification( `User ${ this.props.moviesList.createdBy } Signed In successfully`, 'success', 5000 );
+            this.setState({
+                isLoginSuccess: true
+            });
+        }
     }
     
     handleSelectMenu( event ) {
@@ -64,6 +93,18 @@ class Header extends Component {
     fetchMoviesApi() {
         this.props.fetchMovies();
     }
+    
+    handleAccountActions( event ) {
+        const _eventId = event.target.getAttribute( 'data-id' ),
+         { requestToken = '' } = this.props.account,
+         _urlParams = Helper.extractKeysFromUrl( window.location.search );
+        if( 'signUp' === _eventId && !isEmpty(requestToken) ) {
+            window.location.replace(`https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=http://localhost:3000`);
+        } else if( 'login' === _eventId && requestToken === _urlParams.request_token ) {
+            this.props.fetchUserSessionId( { request_token: requestToken } );
+        }
+    }
+    
     
     render() {
         return (
@@ -91,18 +132,32 @@ class Header extends Component {
                 }
                 </ul>
                 <span className='navbar__devide'></span>
-                <ul className="navbar__actions width-25">
+                <ul className="navbar__actions width-25" onClick = { this.handleAccountActions } >
                     {
                         this.data.navbarActions.map( ( item, index ) => {
                             const _activeClassName = Helper.classNames( `navbar__item width-30`, {
                                 'navbar__item--signUp': item.value === 'signUp',
-                                'navbar__item--login': item.value === 'login'
+                                'navbar__item--login': item.value === 'login',
+                                'navbar__item--loggedIn': item.value === 'loggedIn',
+                                'navbar__item--hidden': item.value === 'login',
+                                'navbar__item--hidden': item.value === 'signUp' && !isEmpty( Helper.extractKeysFromUrl( window.location.search ).request_token ),
                             } );
-                            return (
-                                <li data-id={ item.value }
-                                className={_activeClassName} 
-                                key={`element__${index}__${item.value}`}> { item.displayLabel } </li>
-                            );  
+                            if( item.value !== 'loggedIn' && !this.state.isLoginSuccess ) {
+                                return (
+                                    <li data-id={ item.value }
+                                    className={_activeClassName} 
+                                    key={`element__${index}__${item.value}`}> { item.displayLabel } </li>
+                                );      
+                            } else if( item.value === 'loggedIn' && !isEmpty( this.props.account.requestToken ) && !isEmpty( this.props.account.sessionId ) ) {
+                                return (
+                                    <li data-id={ item.value }
+                                    className={_activeClassName} 
+                                    key={`element__${index}__${item.value}`}> 
+                                    <i className="fas fa-user"></i>
+                                    { this.props.moviesList.createdBy } </li>
+                                );      
+                            }
+                            
                         } )
                     }
                 
@@ -113,12 +168,19 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-    ...state
+    account: state.account,
+    moviesList: state.moviesList
 });
 
 const mapDispatchToProps = dispatch => ({
     fetchMovies: (payload) => {
         dispatch(fetchMovies( payload ));
-    } 
+    },
+    fetchUserRequestToken: ( payload ) => {
+        dispatch(fetchUserRequestToken( payload ));
+    },
+    fetchUserSessionId: ( payload ) => {
+        dispatch(fetchUserSessionId( payload ));
+    }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

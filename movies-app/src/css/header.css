@@ -2,6 +2,21 @@
     display: inline-block;
 }
 
+.toast-notification{
+    width: 100% !important;
+}
+.toast-notification span{
+    width: 100% !important;
+}
+
+
+.navbar__item.width-30.navbar__item--signUp.navbar__item--hidden{
+    display: none;
+}
+
+.fa-user {
+    margin-right: 10px;
+}
 .header__section__title{
     font-size: 16px;
     margin-left: 20px;

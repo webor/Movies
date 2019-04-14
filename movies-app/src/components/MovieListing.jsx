@@ -1,13 +1,57 @@
 import React, { Component, Fragment } from 'react';
 import Preloader from './Preloader';
+import Modal from "react-responsive-modal";
 import '.././css/list.css';
 import MovieElement from './../components/MovieElement';
+import RateMovie from './../components/RateMovie';
 import { removeMovies, updateRating } from '../actions/movieActions';
 import { connect } from 'react-redux';
 
 class MovieListing extends Component {
     constructor( props ) {
         super( props );
+        this.state = {
+            activatedElement: '',
+            activatedAction: ''
+        };
+        this.handleMouseEvent = this.handleMouseEvent.bind( this );
+        this.handleMovieActions =  this.handleMovieActions.bind( this );
+        this.onCloseModal = this.onCloseModal.bind( this );
+        this.fetchRatingCallback = this.fetchRatingCallback.bind( this );
+    }
+    
+    handleMouseEvent( event ) {
+        const _movieId = parseInt(event.target.getAttribute('data-id'));
+        if( _movieId !== this.state.activatedElement ) {
+            this.setState( {
+                activatedElement: _movieId
+            } );
+        }
+    }
+    
+    handleMovieActions( event ) {
+        const _eventId = event.currentTarget.getAttribute('data-action');
+        if( _eventId !== this.state.activatedAction ) {
+            this.setState( {
+                activatedAction: _eventId
+            } );
+        }
+        if( _eventId === 'delete' ) {
+            this.props.removeMovies( { media_id: this.state.activatedElement } );
+        }
+    }
+    
+    onCloseModal() {
+        this.setState( {
+            activatedAction: ''
+        } );
+    }
+    
+    fetchRatingCallback( payload ) {
+        this.props.updateRating({ 
+            movieId: this.state.activatedElement,
+            value: payload
+        });
     }
     
     render() {
@@ -22,11 +66,29 @@ class MovieListing extends Component {
                     {
                         this.props.moviesData.moviesList.map( ( movie ) => {
                             return(
-                                <MovieElement { ...movie } />
+                                <MovieElement { ...{
+                                    ...movie, 
+                                    ...this.state,
+                                    handleMouseEvent: this.handleMouseEvent,
+                                    handleMovieActions: this.handleMovieActions
+                                } } />
                             );
                         } )
                     }
                     </ul>
+                    <Modal
+                        open={ this.state.activatedAction === 'rate' }
+                        onClose={this.onCloseModal}
+                        center
+                        classNames={{
+                            modal: 'rate__movie'
+                    }} >
+                        <RateMovie { ...{
+                            fetchRatingCallback: this.fetchRatingCallback,
+                            moviesList: this.props.moviesData.moviesList,
+                            ...this.state
+                        } } />
+                    </Modal>
                 </Fragment>
             }
         </div>

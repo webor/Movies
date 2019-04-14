@@ -1,3 +1,4 @@
+import { notify } from 'react-notify-toast';
 class Helper{
     classNames = (baseClass, config) => {
         const classNames = [baseClass];
@@ -10,6 +11,31 @@ class Helper{
         });
         return classNames.join(' ').trim();
     };
+    
+    /**
+     * @param {string} searchUrl
+     * @return {object} queryKey and Value
+     */
+    extractKeysFromUrl = (searchUrl) => {
+        const searchUrlString = decodeURIComponent(searchUrl);
+        return searchUrlString.replace('?', '').split('&').reduce((searchQuery, query) => {
+            const splitQuery = query.split('='),
+                queryKey = splitQuery[0],
+                queryValue = splitQuery[1];
+            return {
+                ...searchQuery,
+                [queryKey]: queryValue
+            };
+        }, {});
+    };
+    
+    showNotification = (msg, msgType, timePeriod = 5000) => {
+        if (msgType) {
+            notify.show(msg, msgType, timePeriod);
+        } else {
+            notify.show(msg, 'error', timePeriod);
+        }
+    }
 };
 
 const helper = new Helper();
